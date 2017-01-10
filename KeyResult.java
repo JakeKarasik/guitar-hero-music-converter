@@ -2,22 +2,22 @@ package guitarheromusicconverter;
 
 //import guitarheromusicconverter.FileDownload.Status;
 
-public class MelodyResult {
+public class KeyResult {
 	
 	public Status status;
-	public MelodyResult melody_result;
+	public KeyResult key_result;
     public String key;
     public int key_index;
     public float tuning_frequency;
     public Notes notes[];
     
-    public MelodyResult(Status status, MelodyResult melody_result) {
+    public KeyResult(Status status, KeyResult key_result) {
         
         this.status.code = status.code;    
-        this.melody_result = new MelodyResult(melody_result.key, melody_result.key_index, melody_result.tuning_frequency, melody_result.notes);
+        this.key_result = new KeyResult(key_result.key, key_result.key_index, key_result.tuning_frequency, key_result.notes);
     }	
     
-    public MelodyResult(String key, int key_index, float tuning_frequency, Notes notes[]) {
+    public KeyResult(String key, int key_index, float tuning_frequency, Notes notes[]) {
    
     	this.key = key;
         this.key_index = key_index;
