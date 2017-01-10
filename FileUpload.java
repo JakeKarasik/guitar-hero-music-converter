@@ -19,15 +19,6 @@ public class FileUpload {
         }     
     }
     
-    public class Status {
-        
-        public int code;
-        
-        public Status(int code) {
-            this.code = code;
-        }    
-    }
-    
     public FileUpload(File file, Status status) {
         
         this.file.file_id = file.file_id;

@@ -8,6 +8,7 @@ public class MelodyResult {
     public Notes notes[];
     
     public MelodyResult(String key, int key_index, float tuning_frequency, Notes notes[]) {
+        
         this.key = key;
         this.key_index = key_index;
         this.tuning_frequency = tuning_frequency;
