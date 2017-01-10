@@ -72,7 +72,7 @@ public class Data {
         return null;
     }
     
-    public MelodyResult downloadSongMelody(String file_id) {
+    public Melody downloadMelody(String file_id) {
         
         if (API_KEY == null) {
             System.err.println("Error: API_KEY not set.");
@@ -93,7 +93,7 @@ public class Data {
         }
         
         //Parse JSON response
-        MelodyResult mr = g.fromJson(result, MelodyResult.class);
+        Melody mr = g.fromJson(result, Melody.class);
         
         //Check if successful response from server
         if (!responseIsSuccess(mr.status.code)) {
@@ -101,11 +101,11 @@ public class Data {
             System.err.println("Error: Invalid response from server.");
             return null;
         }
-            
-        return mr.melody_result;
+         
+        return mr;
     }
     
-    public ChordResult downloadSongChords(String file_id) {
+    public Chord downloadChords(String file_id) {
         
         if (API_KEY == null) {
             System.err.println("Error: API_KEY not set.");
@@ -126,7 +126,7 @@ public class Data {
         }
         
         //Parse JSON response
-        ChordResult cr = g.fromJson(result, ChordResult.class);
+        Chord cr = g.fromJson(result, Chord.class);
         
         //Check if successful response from server
         if (!responseIsSuccess(cr.status.code)) {
@@ -137,40 +137,7 @@ public class Data {
             
         return cr;
     }
-    
-    public KeyResult downloadSongKey(String file_id) {
-        
-        if (API_KEY == null) {
-            System.err.println("Error: API_KEY not set.");
-            return null;
-        }
-        
-        //Create POST parameters
-        List <NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("access_id", API_KEY));
-        params.add(new BasicNameValuePair("input_file", file_id));
-        params.add(new BasicNameValuePair("format", "json"));
-        
-        //Get data
-        String result = getData(params, "/analyze/melody");
-        
-        if (result == null) {
-        	return null;
-        }
-        
-        //Parse JSON response
-        KeyResult kr = g.fromJson(result, KeyResult.class);
-        
-        //Check if successful response from server
-        if (!responseIsSuccess(kr.status.code)) {
-                
-            System.err.println("Error: Invalid response from server.");
-            return null;
-        }
-            
-        return kr;
-    }
-    
+   
     //Returns file_id on success, null on failure
     public String uploadSong(String file) {
         

@@ -14,7 +14,8 @@ package guitarheromusicconverter;
         }
         
         public String toString() {
-            return "pitch=" + midi_pitch + ",onset_time=" + onset_time + ",duration=" + duration + ",volume=" + volume;   
+            return "pitch=" + midi_pitch + ", onset_time=" + onset_time + ", duration=" + duration + ", volume=" + volume;   
         }
         
+      
     }
