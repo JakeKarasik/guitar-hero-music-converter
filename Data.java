@@ -22,6 +22,7 @@ public class Data {
     private String API_KEY;
     private String API_BASE_URL = "http://api.sonicapi.com";
     private Gson g = new Gson();
+//    FileDownload download;
     
     public Data() {
         try {
@@ -78,7 +79,7 @@ public class Data {
         return null;
     }
     
-    public MelodyResult downloadSongMelody(String file_id) {
+    public Melody downloadMelody(String file_id) {
         
         if (API_KEY == null) {
             System.err.println("Error: API_KEY not set.");
@@ -97,18 +98,51 @@ public class Data {
         }
         
         //Parse JSON response
-        FileDownload download = g.fromJson(result, FileDownload.class);
+        Melody mr = g.fromJson(result, Melody.class);
         
         //Check if successful response from server
-        if (!responseIsSuccess(download.status.code)) {
+        if (!responseIsSuccess(mr.status.code)) {
+                
+            System.err.println("Error: Invalid response from server.");
+            return null;
+        }
+         
+        return mr;
+    }
+    
+    public Chord downloadChords(String file_id) {
+        
+        if (API_KEY == null) {
+            System.err.println("Error: API_KEY not set.");
+            return null;
+        }
+        
+        //Create POST parameters
+        List <NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("access_id", API_KEY));
+        params.add(new BasicNameValuePair("input_file", file_id));
+        params.add(new BasicNameValuePair("format", "json"));
+        
+        //Get data
+        String result = getData(params, "/analyze/chords");
+        
+        if (result == null) {
+        	return null;
+        }
+        
+        //Parse JSON response
+        Chord cr = g.fromJson(result, Chord.class);
+        
+        //Check if successful response from server
+        if (!responseIsSuccess(cr.status.code)) {
                 
             System.err.println("Error: Invalid response from server.");
             return null;
         }
             
-        return download.melody_result;
+        return cr;
     }
-    
+   
     //Returns file_id on success, null on failure
     public String uploadSong(String file) {
         
