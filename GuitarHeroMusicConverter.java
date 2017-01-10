@@ -4,7 +4,7 @@ public class GuitarHeroMusicConverter {
 
     
     public static void main(String[] args) {
-       System.out.println("pull test");
+       
        Data data = new Data();
        String response = data.uploadSong("https://jakekarasik.com/Idols.ogg");
        Notes[] notes = data.downloadSongData(response);
