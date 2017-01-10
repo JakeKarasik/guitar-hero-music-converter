@@ -21,6 +21,7 @@ public class Data {
     
     private String API_KEY;
     private String API_BASE_URL = "http://api.sonicapi.com";
+    private Gson g = new Gson();
     
     public Data() {
         try {
@@ -35,26 +36,13 @@ public class Data {
             
     }
     
-    public Notes[] downloadSongData(String file_id) {
-        
-        if (API_KEY == null) {
-            System.err.println("Error: API_KEY not set.");
-            return null;
-        }
-        
-        String operation = "/analyze/melody";
-        
-        HttpClient client = HttpClientBuilder.create().build();
+    public String getData(List<NameValuePair> params, String op) {
+    	
+    	HttpClient client = HttpClientBuilder.create().build();
 
         // Create a request instance.
-        HttpPost request = new HttpPost(API_BASE_URL + operation);
-
-        //Create POST parameters
-        List <NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("access_id", API_KEY));
-        params.add(new BasicNameValuePair("input_file", file_id));
-        params.add(new BasicNameValuePair("format", "json"));
-        
+        HttpPost request = new HttpPost(API_BASE_URL + op);
+    	
         //Attempt to send POST request
         try {
             
@@ -74,25 +62,46 @@ public class Data {
             //Free connection
             request.releaseConnection();
             
-            //Parse JSON response
-            Gson g = new Gson();
-            FileDownload download = g.fromJson(result, FileDownload.class);
-
-            //Check if successful response from server
-            if (!responseIsSuccess(download.status.code)) {
-                
-                System.err.println("Error: Invalid response from server.");
-                return null;
-            }
-            
-            return download.melody_result.notes;
-
+            return result;
         } catch (IOException ex) {
-            
-            System.err.println("Error: " + ex.getMessage());
+	            
+	        System.err.println("Error: " + ex.getMessage());
         }
         
         return null;
+    }
+    
+    public MelodyResult downloadSongMelody(String file_id) {
+        
+        if (API_KEY == null) {
+            System.err.println("Error: API_KEY not set.");
+            return null;
+        }
+        
+        //Create POST parameters
+        List <NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("access_id", API_KEY));
+        params.add(new BasicNameValuePair("input_file", file_id));
+        params.add(new BasicNameValuePair("format", "json"));
+        
+        //Get data
+        String result = getData(params, "/analyze/melody");
+        
+        if (result == null) {
+        	return null;
+        }
+        
+        //Parse JSON response
+        FileDownload download = g.fromJson(result, FileDownload.class);
+        
+        //Check if successful response from server
+        if (!responseIsSuccess(download.status.code)) {
+                
+            System.err.println("Error: Invalid response from server.");
+            return null;
+        }
+            
+        return download.melody_result;
     }
     
     //Returns file_id on success, null on failure
@@ -102,13 +111,6 @@ public class Data {
             System.err.println("Error: API_KEY not set.");
             return null;
         }
-           
-        String operation = "/file/upload";
-        
-        HttpClient client = HttpClientBuilder.create().build();
-
-        // Create a request instance.
-        HttpPost request = new HttpPost(API_BASE_URL + operation);
 
         //Create POST parameters
         List <NameValuePair> params = new ArrayList<>();
@@ -116,44 +118,23 @@ public class Data {
         params.add(new BasicNameValuePair("file", file));
         params.add(new BasicNameValuePair("format", "json"));
         
-        //Attempt to send POST request
-        try {
+      //Get data
+       String result = getData(params, "/file/upload");
+        
+       if (result == null) {
+    	   return null;
+       }
+        //Parse JSON response
+        FileUpload upload = g.fromJson(result, FileUpload.class);
+        
+        //Check if successful response from server
+        if (!responseIsSuccess(upload.status.code)) {
             
-            //Add params to request
-            request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-            
-            // Execute the request.
-            HttpResponse response = client.execute(request);
-
-            //Get response from server into string
-            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            String result = "", line; 
-            while ((line = rd.readLine()) != null) {
-                result += line;
-            }
-            
-            //Free connection
-            request.releaseConnection();
-            
-            //Parse JSON response
-            Gson g = new Gson();
-            FileUpload upload = g.fromJson(result, FileUpload.class);
-            
-            //Check if successful response from server
-            if (!responseIsSuccess(upload.status.code)) {
-                
-                System.err.println("Error: Invalid response from server.");
-                return null;
-            }
-            
-            return upload.file.file_id;
-
-        } catch (IOException ex) {
-            
-            System.err.println("Error: " + ex.getMessage());
+            System.err.println("Error: Invalid response from server.");
+            return null;
         }
         
-        return null;
+        return upload.file.file_id;
     }
     
     private boolean responseIsSuccess(int code) {

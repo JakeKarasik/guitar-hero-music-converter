@@ -4,13 +4,13 @@ public class GuitarHeroMusicConverter {
 
     
     public static void main(String[] args) {
-       System.out.println("Hello!");
+
        Data data = new Data();
-       String response = data.uploadSong("https://jakekarasik.com/Idols.ogg");
-       Notes[] notes = data.downloadSongData(response);
-       System.out.println("response="+response);
-       for (int i=0,len=notes.length;i<len;i++) {
-           System.out.println(notes[i]);
+       String songID = data.uploadSong("https://jakekarasik.com/Idols.ogg");
+       MelodyResult mr = data.downloadSongMelody(songID);
+       System.out.println("response="+songID);
+       for (int i=0,len=mr.notes.length;i<len;i++) {
+           System.out.println(mr.notes[i]);
        }
        
        
