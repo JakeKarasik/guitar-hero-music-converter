@@ -21,10 +21,7 @@ public class FileUpload {
     
     public FileUpload(File file, Status status) {
         
-        this.file.file_id = file.file_id;
-        this.file.status = file.status;
-        this.file.href = file.href;
-        this.file.remaining_lifetime_seconds = file.remaining_lifetime_seconds;
         this.status.code = status.code;
+        this.file = new File(file.file_id, file.status, file.href, file.remaining_lifetime_seconds);
     }  
 }
