@@ -137,7 +137,7 @@ public class Data {
             return null;
         }
         
-        return upload.file.file_id;
+        return upload.file_result.file_id;
     }
     
     private boolean responseIsSuccess(int code) {
