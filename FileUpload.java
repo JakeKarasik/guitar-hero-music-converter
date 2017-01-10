@@ -2,15 +2,15 @@ package guitarheromusicconverter;
 
 public class FileUpload {
     
-    public File file;
+    public FileResult file_result;
     public Status status;
     
-    public class File {
+    public class FileResult {
         
         public String file_id, status, href;
         public int remaining_lifetime_seconds;
         
-        public File(String file_id, String status, String href, int remaining_lifetime_seconds) {
+        public FileResult(String file_id, String status, String href, int remaining_lifetime_seconds) {
             
             this.file_id = file_id;
             this.status = status;
@@ -19,21 +19,9 @@ public class FileUpload {
         }     
     }
     
-    public class Status {
+    public FileUpload(FileResult file_result, Status status) {
         
-        public int code;
-        
-        public Status(int code) {
-            this.code = code;
-        }    
-    }
-    
-    public FileUpload(File file, Status status) {
-        
-        this.file.file_id = file.file_id;
-        this.file.status = file.status;
-        this.file.href = file.href;
-        this.file.remaining_lifetime_seconds = file.remaining_lifetime_seconds;
         this.status.code = status.code;
+        this.file_result = new FileResult(file_result.file_id, file_result.status, file_result.href, file_result.remaining_lifetime_seconds);
     }  
 }

@@ -39,6 +39,13 @@ public class Data {
     
     public String getData(List<NameValuePair> params, String op) {
     	
+        //Set API KEY for POST request
+        params.add(new BasicNameValuePair("access_id", API_KEY));
+        
+        //Set format to JSON for POST request
+        params.add(new BasicNameValuePair("format", "json"));
+        
+        //Create client
     	HttpClient client = HttpClientBuilder.create().build();
 
         // Create a request instance.
@@ -81,9 +88,7 @@ public class Data {
         
         //Create POST parameters
         List <NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("access_id", API_KEY));
         params.add(new BasicNameValuePair("input_file", file_id));
-        params.add(new BasicNameValuePair("format", "json"));
         
         //Get data
         String result = getData(params, "/analyze/melody");
@@ -148,9 +153,7 @@ public class Data {
 
         //Create POST parameters
         List <NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("access_id", API_KEY));
         params.add(new BasicNameValuePair("file", file));
-        params.add(new BasicNameValuePair("format", "json"));
         
       //Get data
        String result = getData(params, "/file/upload");
@@ -168,7 +171,7 @@ public class Data {
             return null;
         }
         
-        return upload.file.file_id;
+        return upload.file_result.file_id;
     }
     
     private boolean responseIsSuccess(int code) {
