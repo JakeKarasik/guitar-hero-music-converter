@@ -119,9 +119,7 @@ public class Data {
         
         //Create POST parameters
         List <NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("access_id", API_KEY));
         params.add(new BasicNameValuePair("input_file", file_id));
-        params.add(new BasicNameValuePair("format", "json"));
         
         //Get data
         String result = getData(params, "/analyze/chords");
@@ -171,7 +169,7 @@ public class Data {
             return null;
         }
         
-        return upload.file_result.file_id;
+        return upload.file.file_id;
     }
     
     private boolean responseIsSuccess(int code) {

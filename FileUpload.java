@@ -2,7 +2,7 @@ package guitarheromusicconverter;
 
 public class FileUpload {
     
-    public FileResult file_result;
+    public FileResult file;
     public Status status;
     
     public class FileResult {
@@ -22,6 +22,6 @@ public class FileUpload {
     public FileUpload(FileResult file_result, Status status) {
         
         this.status.code = status.code;
-        this.file_result = new FileResult(file_result.file_id, file_result.status, file_result.href, file_result.remaining_lifetime_seconds);
+        this.file = new FileResult(file_result.file_id, file_result.status, file_result.href, file_result.remaining_lifetime_seconds);
     }  
 }
