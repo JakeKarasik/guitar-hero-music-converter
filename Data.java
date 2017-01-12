@@ -40,9 +40,6 @@ public class Data {
 
         //Set format to JSON for POST request     
         params.addTextBody("format", "json");
-
-        //Add params to request
-        HttpEntity params_entity = params.build();
         
         //Create client
     	HttpClient client = HttpClientBuilder.create().build();
@@ -54,7 +51,7 @@ public class Data {
         try {
             
             //Add POST params to request
-            request.setEntity(params_entity);
+            request.setEntity(params.build());
             
             // Execute the request.
             HttpResponse response = client.execute(request);
