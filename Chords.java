@@ -3,12 +3,14 @@ package guitarheromusicconverter;
 public class Chords {
 
 	public int index;
-	public float time;
+	public double time;
 	public String chord;
 
-	public Chords(int index, float time, String chord){
+	public Chords(int index, double time, String chord){
+		
+    	
+        this.time = (double) Math.round(time * 100) / 100;;
 		this.index = index;
-		this.time = time;
 		this.chord = chord;
 
 	}
