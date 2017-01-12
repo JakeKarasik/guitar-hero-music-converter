@@ -8,7 +8,6 @@ public class Melody {
 	Result result;
 	
 	public Melody(Status status, Result r) {
-
 		this.status.code = status.code;    
 		this.result = new Result(r.key, r.key_index, r.tuning_frequency,r.notes);
 	}	
@@ -34,5 +33,4 @@ public class Melody {
 			}
 		}
 	}
-
 }
