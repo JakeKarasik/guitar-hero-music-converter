@@ -10,16 +10,9 @@ public class GuitarHeroMusicConverter {
        System.out.println("songID="+songID);
        
         if (songID != null) {
-            Melody melody = data.downloadMelody(songID);
-            for (int i=0,len=melody.result.notes.length;i<len;i++) {
-            System.out.println(melody.result.notes[i]);
-            }
-
-            Chord chord = data.downloadChords(songID);
-            System.out.println("songID="+songID);
-            for (int i=0,len=chord.result.chords.length;i<len;i++) {
-                System.out.println(chord.result.chords[i]);
-            }
+            //Melody melody = data.downloadMelody(songID);
+            //Chord chord = data.downloadChords(songID);
+            Chart chart = new Chart("How To Save A Life", "The Fray", "howtosavealife.mp3", 480);
         } 
     }
 }

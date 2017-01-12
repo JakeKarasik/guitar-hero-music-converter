@@ -62,13 +62,15 @@ public class Data {
                 result += line;
             }
 
-            //Free connection
-            request.releaseConnection();
-
             return result;
         } catch (IOException ex) {
             
             System.err.println("Error: " + ex.getMessage());
+        } finally {
+            
+            //Free connection
+            request.releaseConnection();
+            
         }
 
         return null;
