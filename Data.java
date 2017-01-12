@@ -145,7 +145,7 @@ public class Data {
     }
    
     //Returns file_id on success, null on failure
-    public String uploadSong(String file) {
+    public String uploadSong(String file_name) {
         
         if (API_KEY == null) {
             System.err.println("Error: API_KEY not set.");
@@ -155,8 +155,17 @@ public class Data {
         //Create multipart builder for file upload
         MultipartEntityBuilder params = MultipartEntityBuilder.create();
         
+        File file = new File(file_name);
+        
+        //Make sure input is valid file
+        if(!file.exists() || file.isDirectory()) {
+            
+            System.err.println("Error: uploadSong() failed, file does not exist.");
+            return null;
+        }
+        
         //Add file for POST request
-        params.addBinaryBody("file", new File(file));
+        params.addBinaryBody("file", file);
         
         //Get data
         String result = getData(params, "/file/upload");
