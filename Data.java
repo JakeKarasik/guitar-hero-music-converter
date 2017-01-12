@@ -6,23 +6,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.client.methods.*;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 
 public class Data {
     
     private String API_KEY;
     private String API_BASE_URL = "http://api.sonicapi.com";
     private Gson g = new Gson();
-//    FileDownload download;
     
     public Data() {
         try {
@@ -31,19 +27,22 @@ public class Data {
             
         } catch (FileNotFoundException ex) {
             
-            System.out.println("API_KEY not set - " + ex.getMessage());
+            System.err.println("Error: API_KEY failed to load - " + ex.getMessage());
             API_KEY = null;
         }
             
     }
     
-    public String getData(List<NameValuePair> params, String op) {
-    	
+    public String getData(MultipartEntityBuilder params, String op) {
+    	 
         //Set API KEY for POST request
-        params.add(new BasicNameValuePair("access_id", API_KEY));
-        
-        //Set format to JSON for POST request
-        params.add(new BasicNameValuePair("format", "json"));
+        params.addTextBody("access_id", API_KEY);
+
+        //Set format to JSON for POST request     
+        params.addTextBody("format", "json");
+
+        //Add params to request
+        HttpEntity params_entity = params.build();
         
         //Create client
     	HttpClient client = HttpClientBuilder.create().build();
@@ -54,8 +53,8 @@ public class Data {
         //Attempt to send POST request
         try {
             
-            //Add params to request
-            request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+            //Add POST params to request
+            request.setEntity(params_entity);
             
             // Execute the request.
             HttpResponse response = client.execute(request);
@@ -86,15 +85,17 @@ public class Data {
             return null;
         }
         
-        //Create POST parameters
-        List <NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("input_file", file_id));
+        //Create multipart builder for file upload
+        MultipartEntityBuilder params = MultipartEntityBuilder.create();
+        
+        //Add file_id for POST request
+        params.addTextBody("input_file", file_id);
         
         //Get data
         String result = getData(params, "/analyze/melody");
         
         if (result == null) {
-        	return null;
+            return null;
         }
         
         //Parse JSON response
@@ -117,9 +118,11 @@ public class Data {
             return null;
         }
         
-        //Create POST parameters
-        List <NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("input_file", file_id));
+        //Create multipart builder for file upload
+        MultipartEntityBuilder params = MultipartEntityBuilder.create();
+        
+        //Add file_id for POST request
+        params.addTextBody("input_file", file_id);
         
         //Get data
         String result = getData(params, "/analyze/chords");
@@ -149,16 +152,18 @@ public class Data {
             return null;
         }
 
-        //Create POST parameters
-        List <NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("file", file));
+        //Create multipart builder for file upload
+        MultipartEntityBuilder params = MultipartEntityBuilder.create();
         
-      //Get data
-       String result = getData(params, "/file/upload");
+        //Add file for POST request
+        params.addBinaryBody("file", new File(file));
         
-       if (result == null) {
-    	   return null;
-       }
+        //Get data
+        String result = getData(params, "/file/upload");
+        
+        if (result == null) {
+            return null;
+        }
         //Parse JSON response
         FileUpload upload = g.fromJson(result, FileUpload.class);
         
